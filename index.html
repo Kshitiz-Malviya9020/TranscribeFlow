@@ -11,9 +11,140 @@
         #vanta-bg { position: fixed; z-index: -1; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0a0a0a; }
         body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; flex-direction: column; align-items: center; color: white; min-height: 100vh; overflow-x: hidden; }
         
-        .nav-header { position: absolute; top: 0; left: 0; width: 100%; padding: 30px 50px; box-sizing: border-box; z-index: 10; }
+        /* HEADER UPDATES */
+        .nav-header { 
+            position: absolute; top: 0; left: 0; width: 100%; padding: 30px 50px; 
+            box-sizing: border-box; z-index: 10; display: flex; justify-content: space-between; align-items: center;
+        }
         .logo-text { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; font-style: italic; background: linear-gradient(to right, #00ffff, #ffffff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
         
+        /* BUTTON STYLES */
+        .user-nav { display: flex; align-items: center; gap: 15px; }
+        .nav-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-btn svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.3s; }
+        .btn-login { background: transparent; border: 1px solid rgba(0, 255, 255, 0.5); color: #00ffff; }
+        .btn-login:hover { background: rgba(0, 255, 255, 0.1); border-color: #00ffff; box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
+        .btn-login:hover svg { transform: scale(1.1); }
+        .btn-signup { background: #00ffff; border: 1px solid #00ffff; color: #000000; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
+        .btn-signup:hover { background: #ffffff; border-color: #ffffff; box-shadow: 0 0 40px rgba(0, 255, 255, 0.8); transform: translateY(-2px); }
+        .btn-signup:hover svg { transform: rotate(15deg) scale(1.2); }
+        .user-greeting { font-size: 14px; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- ROBOT MASCOT STYLES --- */
+        .bot-container {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 140px;
+            height: 140px;
+            z-index: 100;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+            animation: floatBot 4s ease-in-out infinite;
+            cursor: pointer;
+        }
+        @keyframes floatBot { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
+
+        .bot-body {
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #e0e0e0, #a0a0a0);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5);
+        }
+        .bot-body::before {
+            content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+            width: 15px; height: 30px; background: #c0c0c0; border-radius: 10px 0 0 10px;
+            box-shadow: inset -2px 0 5px rgba(0,0,0,0.3);
+        }
+
+        .bot-screen {
+            position: absolute;
+            top: 22%; left: 15%;
+            width: 75%; height: 55%;
+            background: black;
+            border-radius: 40% 40% 45% 45%;
+            box-shadow: inset 0 0 15px #00ffff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+        }
+
+        /* DEFAULT EYE STYLE */
+        .bot-eye {
+            width: 14px; 
+            height: 30px; 
+            background: linear-gradient(180deg, #00ffff, #0088ff);
+            border-radius: 20px;
+            box-shadow: 0 0 15px #00ffff;
+            position: relative;
+            /* Removed generic transition for smoother mouse tracking */
+            /* transition: all 0.1s ease-out;  <-- Only use this if not updating every frame */
+        }
+
+        /* HAPPY STAR EYE STYLE (Bright Yellow) */
+        .bot-eye.star-mode {
+            width: 28px;
+            height: 28px;
+            border-radius: 0;
+            background: #ffd700; /* Gold */
+            box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700; /* Intense Yellow Glow */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            transform: rotate(180deg) !important;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        .bot-shine {
+            position: absolute; top: 15%; right: 20%;
+            width: 20px; height: 10px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            transform: rotate(-45deg);
+        }
+        /* --- END ROBOT STYLES --- */
+
+        /* AUTH MODAL STYLES */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
+            z-index: 1000; display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .auth-card {
+            background: rgba(20, 20, 20, 0.9); border: 1px solid #00ffff;
+            padding: 40px; border-radius: 30px; width: 100%; max-width: 400px;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2); text-align: center;
+            transform: scale(0.9); transition: transform 0.3s ease;
+        }
+        .auth-input {
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px; color: white; outline: none; box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .auth-input:focus { border-color: #00ffff; }
+        .auth-btn {
+            width: 100%; padding: 15px; background: #00ffff; color: #000;
+            border: none; border-radius: 12px; font-weight: 800; cursor: pointer;
+            margin-top: 10px; transition: 0.3s;
+        }
+        .auth-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
+        .toggle-text { margin-top: 20px; font-size: 13px; color: #aaa; cursor: pointer; text-decoration: underline; }
+
+        /* EXISTING STYLES */
         #landing-view {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100vh; width: 100%; text-align: center; z-index: 5;
@@ -161,7 +292,56 @@
     
     <header class="nav-header">
         <div class="logo-text" onclick="window.location.reload()">TranscribeFlow</div>
+        
+        <div class="user-nav">
+            <span id="user-greeting" class="user-greeting" style="display:none;"></span>
+            
+            <button id="login-btn" class="nav-btn btn-login" onclick="openAuth('login')">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                Login
+            </button>
+            
+            <button id="signup-btn" class="nav-btn btn-signup" onclick="openAuth('register')">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
+                Sign Up
+            </button>
+
+            <button id="logout-btn" class="nav-btn" style="display:none; border: 1px solid #ff3c3c; color:#ff3c3c; background: transparent;" onclick="logout()">Logout</button>
+        </div>
     </header>
+
+    <div class="bot-container" onclick="openAuthModal()" title="I'm watching you! (Click to login)">
+        <div class="bot-body">
+            <div class="bot-shine"></div>
+            <div class="bot-screen">
+                <div class="bot-eye left-eye"></div>
+                <div class="bot-eye right-eye"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal-overlay">
+        <div class="auth-card">
+            <div id="login-form">
+                <h2 style="margin: 0 0 20px 0; font-family: 'Playfair Display', serif;">Welcome Back</h2>
+                <input type="email" id="login-email" class="auth-input" placeholder="Email Address">
+                <input type="password" id="login-password" class="auth-input" placeholder="Password">
+                <button class="auth-btn" onclick="loginUser()">Log In</button>
+                <div class="toggle-text" onclick="toggleAuthMode('register')">New here? Create Account</div>
+            </div>
+
+            <div id="register-form" style="display:none;">
+                <h2 style="margin: 0 0 20px 0; font-family: 'Playfair Display', serif;">Join TranscribeFlow</h2>
+                <input type="text" id="reg-name" class="auth-input" placeholder="Full Name">
+                <input type="email" id="reg-email" class="auth-input" placeholder="Email Address">
+                <input type="password" id="reg-password" class="auth-input" placeholder="Create Password">
+                <button class="auth-btn" onclick="registerUser()">Sign Up</button>
+                <div class="toggle-text" onclick="toggleAuthMode('login')">Already have an account? Log In</div>
+            </div>
+            
+            <button onclick="closeAuthModal()" style="background:none; border:none; color:#666; margin-top:15px; cursor:pointer;">Close</button>
+        </div>
+    </div>
 
     <section id="landing-view">
         <h1 class="landing-title">Audio to Insight<br>Instantly.</h1>
@@ -293,6 +473,139 @@
             "Finalizing the linguistic structure..."
         ];
 
+        // --- BOT TRACKING & STAR EYE LOGIC ---
+        
+        // 1. Movement Tracking
+        document.addEventListener('mousemove', (e) => {
+            const eyes = document.querySelectorAll('.bot-eye');
+            eyes.forEach(eye => {
+                if (eye.classList.contains('star-mode')) return; // Don't move if in star mode
+                
+                const rect = eye.getBoundingClientRect();
+                const eyeX = rect.left + rect.width / 2;
+                const eyeY = rect.top + rect.height / 2;
+                const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+                
+                // --- INCREASED DISTANCE LIMIT TO 8px FOR BETTER VISIBILITY ---
+                const distance = Math.min(8, Math.hypot(e.clientX - eyeX, e.clientY - eyeY));
+                
+                const moveX = Math.cos(angle) * distance;
+                const moveY = Math.sin(angle) * distance;
+                eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+
+        // 2. Star Eye Interaction (On Start Button Hover)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select both start button and the submit button
+            const startButtons = document.querySelectorAll('.start-btn, .submit-btn'); 
+            const eyes = document.querySelectorAll('.bot-eye');
+
+            startButtons.forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    eyes.forEach(eye => {
+                        eye.classList.add('star-mode');
+                        eye.style.transform = 'translate(0, 0)'; // Reset position for star
+                    });
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    eyes.forEach(eye => eye.classList.remove('star-mode'));
+                });
+            });
+        });
+
+        // --- AUTH LOGIC START ---
+        function openAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.style.opacity = '1', 10);
+        }
+
+        function openAuth(mode) {
+            openAuthModal();
+            toggleAuthMode(mode);
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.style.opacity = '0';
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function toggleAuthMode(mode) {
+            if (mode === 'register') {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('register-form').style.display = 'block';
+            } else {
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+            }
+        }
+
+        function checkLoginStatus() {
+            const token = localStorage.getItem('access_token');
+            const name = localStorage.getItem('user_name');
+            if (token && name) {
+                document.getElementById('login-btn').style.display = 'none';
+                document.getElementById('signup-btn').style.display = 'none';
+                document.getElementById('user-greeting').innerText = "HI, " + name;
+                document.getElementById('user-greeting').style.display = 'block';
+                document.getElementById('logout-btn').style.display = 'flex';
+            }
+        }
+
+        function registerUser() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            fetch('/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, email: email, password: password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message) {
+                    launchToast("Registration Success! Please Login.");
+                    toggleAuthMode('login');
+                } else {
+                    Swal.fire('Error', data.detail || "Registration failed", 'error');
+                }
+            });
+        }
+
+        function loginUser() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, password: password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.access_token) {
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('user_name', data.name);
+                    closeAuthModal();
+                    launchToast("Logged In Successfully!");
+                    checkLoginStatus();
+                } else {
+                    Swal.fire('Error', data.detail || "Login failed", 'error');
+                }
+            });
+        }
+
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_name');
+            location.reload();
+        }
+        // --- AUTH LOGIC END ---
+
         function confirmPurge() {
             Swal.fire({
                 title: 'Purge All History?',
@@ -385,6 +698,9 @@
                 VANTA.WAVES({ el: "#vanta-bg", mouseControls: true, color: 0x070707, waveHeight: 15 });
             }
 
+            // Check if user is logged in
+            checkLoginStatus();
+
             const input = document.getElementById('audio-input');
             const nameDisplay = document.getElementById('file-name-display');
             const audioPreview = document.getElementById('audio-live-preview');
@@ -404,15 +720,44 @@
             const uploadForm = document.getElementById('main-upload-form');
             uploadForm.onsubmit = function(e) {
                 e.preventDefault();
+
+                // --- FREE TRIAL CHECK ---
+                const token = localStorage.getItem('access_token');
+                const hasUsedFree = localStorage.getItem('free_trial_used');
+
+                if (!token && hasUsedFree) {
+                    Swal.fire({
+                        title: 'Free Trial Ended',
+                        text: 'You have used your free transcription. Please Sign Up or Login to continue!',
+                        icon: 'info',
+                        confirmButtonText: 'Sign Up Now',
+                        confirmButtonColor: '#00ffff',
+                        background: '#1a1a1a',
+                        color: '#fff'
+                    }).then(() => {
+                        openAuth('register');
+                    });
+                    return;
+                }
+
                 submitBtn.disabled = true;
                 submitBtn.innerText = "Uploading...";
                 
                 const formData = new FormData(uploadForm);
-                
-                fetch('/upload', { method: 'POST', body: formData })
+                const headers = {};
+                if (token) {
+                    headers['Authorization'] = 'Bearer ' + token;
+                }
+
+                fetch('/upload', { 
+                    method: 'POST', 
+                    body: formData,
+                    headers: headers 
+                })
                 .then(res => res.json())
                 .then(data => {
                     if (data.filename) { 
+                        if (!token) localStorage.setItem('free_trial_used', 'true');
                         launchToast("UPLOAD SUCCESSFUL");
                         document.getElementById('progress-container').style.display = 'block';
                         currentFilename = data.filename; 
@@ -452,8 +797,6 @@
                     }
                     
                     if (data.status === 'processing') {
-                        // Backend is sending progress updates. 
-                        // If progress is between 65 and 80, we know it's in the T5 Summarization phase
                         if (data.progress > 65 && data.progress < 85) {
                             msgText.textContent = "AI generating concise summary...";
                         } else {
@@ -538,7 +881,6 @@
             const highlighted = transcript.replace(/\[(\d{2}:\d{2}(?::\d{2})?\s*-\s*\d{2}:\d{2}(?::\d{2})?)\]/g, '<span class="timestamp">$1</span>');
             
             transcriptBox.innerHTML = highlighted;
-            // Handle T5 Summary specifically
             summaryBox.textContent = summary || "No summary available (text might be too short)";
             
             resultPanel.style.display = 'block';
