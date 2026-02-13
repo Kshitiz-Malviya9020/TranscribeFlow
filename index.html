@@ -11,7 +11,7 @@
         #vanta-bg { position: fixed; z-index: -1; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0a0a0a; }
         body { margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; flex-direction: column; align-items: center; color: white; min-height: 100vh; overflow-x: hidden; }
         
-        /* HEADER UPDATES */
+        /* HEADER */
         .nav-header { 
             position: absolute; top: 0; left: 0; width: 100%; padding: 30px 50px; 
             box-sizing: border-box; z-index: 10; display: flex; justify-content: space-between; align-items: center;
@@ -42,81 +42,23 @@
         .btn-signup:hover svg { transform: rotate(15deg) scale(1.2); }
         .user-greeting { font-size: 14px; font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- ROBOT MASCOT STYLES --- */
+        /* ROBOT MASCOT */
         .bot-container {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            width: 140px;
-            height: 140px;
-            z-index: 100;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
-            animation: floatBot 4s ease-in-out infinite;
-            cursor: pointer;
+            position: fixed; bottom: 40px; right: 40px; width: 140px; height: 140px;
+            z-index: 100; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+            animation: floatBot 4s ease-in-out infinite; cursor: pointer;
         }
         @keyframes floatBot { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
+        .bot-body { width: 100%; height: 100%; background: radial-gradient(circle at 30% 30%, #ffffff, #e0e0e0, #a0a0a0); border-radius: 50%; position: relative; box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5); }
+        .bot-body::before { content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%); width: 15px; height: 30px; background: #c0c0c0; border-radius: 10px 0 0 10px; box-shadow: inset -2px 0 5px rgba(0,0,0,0.3); }
+        .bot-screen { position: absolute; top: 22%; left: 15%; width: 75%; height: 55%; background: black; border-radius: 40% 40% 45% 45%; box-shadow: inset 0 0 15px #00ffff; overflow: hidden; display: flex; justify-content: center; align-items: center; gap: 18px; }
+        .bot-eye { width: 14px; height: 30px; background: linear-gradient(180deg, #00ffff, #0088ff); border-radius: 20px; box-shadow: 0 0 15px #00ffff; position: relative; }
+        .bot-eye.star-mode { width: 28px; height: 28px; border-radius: 0; background: #ffd700; box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); transform: rotate(180deg) !important; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+        .bot-shine { position: absolute; top: 15%; right: 20%; width: 20px; height: 10px; background: rgba(255,255,255,0.8); border-radius: 50%; transform: rotate(-45deg); }
 
-        .bot-body {
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at 30% 30%, #ffffff, #e0e0e0, #a0a0a0);
-            border-radius: 50%;
-            position: relative;
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5);
-        }
-        .bot-body::before {
-            content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
-            width: 15px; height: 30px; background: #c0c0c0; border-radius: 10px 0 0 10px;
-            box-shadow: inset -2px 0 5px rgba(0,0,0,0.3);
-        }
-
-        .bot-screen {
-            position: absolute;
-            top: 22%; left: 15%;
-            width: 75%; height: 55%;
-            background: black;
-            border-radius: 40% 40% 45% 45%;
-            box-shadow: inset 0 0 15px #00ffff;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 18px;
-        }
-
-        /* DEFAULT EYE STYLE */
-        .bot-eye {
-            width: 14px; 
-            height: 30px; 
-            background: linear-gradient(180deg, #00ffff, #0088ff);
-            border-radius: 20px;
-            box-shadow: 0 0 15px #00ffff;
-            position: relative;
-            /* Removed generic transition for smoother mouse tracking */
-            /* transition: all 0.1s ease-out;  <-- Only use this if not updating every frame */
-        }
-
-        /* HAPPY STAR EYE STYLE (Bright Yellow) */
-        .bot-eye.star-mode {
-            width: 28px;
-            height: 28px;
-            border-radius: 0;
-            background: #ffd700; /* Gold */
-            box-shadow: 0 0 20px #ffff00, 0 0 40px #ffd700; /* Intense Yellow Glow */
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            transform: rotate(180deg) !important;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
-        
-        .bot-shine {
-            position: absolute; top: 15%; right: 20%;
-            width: 20px; height: 10px;
-            background: rgba(255,255,255,0.8);
-            border-radius: 50%;
-            transform: rotate(-45deg);
-        }
-        /* --- END ROBOT STYLES --- */
-
-        /* AUTH MODAL STYLES */
+        /* ========================================================
+           AUTH MODAL — UPDATED
+        ======================================================== */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
@@ -124,164 +66,121 @@
             opacity: 0; transition: opacity 0.3s ease;
         }
         .auth-card {
-            background: rgba(20, 20, 20, 0.9); border: 1px solid #00ffff;
-            padding: 40px; border-radius: 30px; width: 100%; max-width: 400px;
+            background: rgba(20, 20, 20, 0.95); border: 1px solid #00ffff;
+            padding: 40px; border-radius: 30px; width: 100%; max-width: 420px;
             box-shadow: 0 0 50px rgba(0, 255, 255, 0.2); text-align: center;
             transform: scale(0.9); transition: transform 0.3s ease;
+            max-height: 90vh; overflow-y: auto;
         }
+        .auth-card::-webkit-scrollbar { width: 4px; }
+        .auth-card::-webkit-scrollbar-thumb { background: #00ffff; border-radius: 10px; }
+
         .auth-input {
-            width: 100%; padding: 15px; margin-bottom: 15px;
+            width: 100%; padding: 14px 16px; margin-bottom: 12px;
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px; color: white; outline: none; box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px;
+            transition: border-color 0.25s;
         }
-        .auth-input:focus { border-color: #00ffff; }
+        .auth-input:focus { border-color: #00ffff; background: rgba(0,255,255,0.04); }
+        .auth-input::placeholder { color: rgba(255,255,255,0.35); }
+
+        /* Login-type toggle (Email / Phone) */
+        .login-type-toggle {
+            display: flex; gap: 8px; margin-bottom: 16px;
+        }
+        .toggle-pill {
+            flex: 1; padding: 9px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
+            background: transparent; color: rgba(255,255,255,0.5); font-weight: 700;
+            font-size: 12px; cursor: pointer; letter-spacing: 0.5px; transition: 0.25s;
+        }
+        .toggle-pill.active {
+            background: #00ffff; color: #000; border-color: #00ffff;
+        }
+
+        /* Password strength meter */
+        .pwd-meter-wrap { text-align: left; margin-bottom: 12px; }
+        .pwd-meter-bar { height: 4px; border-radius: 10px; background: rgba(255,255,255,0.1); overflow: hidden; margin-bottom: 5px; }
+        .pwd-meter-fill { height: 100%; width: 0%; border-radius: 10px; transition: width 0.3s, background 0.3s; }
+        .pwd-meter-text { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: rgba(255,255,255,0.4); transition: color 0.3s; }
+        .pwd-rules { margin: 0 0 12px; padding: 0; list-style: none; text-align: left; }
+        .pwd-rules li { font-size: 11px; padding: 3px 0; color: rgba(255,255,255,0.4); transition: color 0.3s; display: flex; align-items: center; gap: 6px; }
+        .pwd-rules li::before { content: '✗'; font-weight: 800; color: #ff4444; transition: 0.3s; }
+        .pwd-rules li.ok { color: #00ffcc; }
+        .pwd-rules li.ok::before { content: '✓'; color: #00ffcc; }
+
         .auth-btn {
             width: 100%; padding: 15px; background: #00ffff; color: #000;
             border: none; border-radius: 12px; font-weight: 800; cursor: pointer;
-            margin-top: 10px; transition: 0.3s;
+            margin-top: 4px; transition: 0.3s; font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px; letter-spacing: 0.5px;
         }
         .auth-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
-        .toggle-text { margin-top: 20px; font-size: 13px; color: #aaa; cursor: pointer; text-decoration: underline; }
+        .auth-btn:disabled { background: #555; color: #888; cursor: not-allowed; transform: none; }
 
-        /* EXISTING STYLES */
+        .auth-divider { display: flex; align-items: center; gap: 10px; margin: 14px 0; }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+        .auth-divider span { font-size: 11px; color: rgba(255,255,255,0.3); font-weight: 700; letter-spacing: 1px; }
+
+        .toggle-text { margin-top: 16px; font-size: 13px; color: #aaa; cursor: pointer; }
+        .toggle-text span { color: #00ffff; font-weight: 800; text-decoration: underline; }
+        .forgot-link { display: block; margin-top: 10px; font-size: 12px; color: rgba(0,255,255,0.7); cursor: pointer; transition: color 0.2s; }
+        .forgot-link:hover { color: #00ffff; }
+
+        .auth-error { color: #ff4444; font-size: 12px; font-weight: 700; margin-top: 8px; min-height: 16px; }
+        .auth-success { color: #00ffcc; font-size: 13px; font-weight: 700; margin-top: 8px; min-height: 16px; line-height: 1.5; }
+
+        /* ========================================================
+           EXISTING STYLES (unchanged)
+        ======================================================== */
         #landing-view {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100vh; width: 100%; text-align: center; z-index: 5;
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
-        
         .landing-title { font-size: clamp(48px, 8vw, 90px); font-weight: 800; letter-spacing: -4px; line-height: 0.9; margin-bottom: 30px; background: linear-gradient(to bottom, #fff, #666); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .start-btn {
-            background: #fff; color: #000; border: none; padding: 22px 50px; font-size: 18px; font-weight: 800; 
-            border-radius: 100px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
-        }
+        .start-btn { background: #fff; color: #000; border: none; padding: 22px 50px; font-size: 18px; font-weight: 800; border-radius: 100px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
         .start-btn:hover { transform: scale(1.05); background: #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
 
-        #app-view {
-            display: none; flex-direction: column; align-items: center; width: 100%; padding: 120px 20px 80px 20px;
-            opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease;
-        }
-
+        #app-view { display: none; flex-direction: column; align-items: center; width: 100%; padding: 120px 20px 80px 20px; opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
         .hero-section { text-align: center; margin-bottom: 50px; }
         .hero-headline { font-size: clamp(32px, 5vw, 64px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; background: linear-gradient(135deg, #ffffff 0%, #a5a5a5 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
         
-        .upload-card {
-            position: relative;
-            width: 100%; max-width: 520px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 35px; padding: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            z-index: 2;
-        }
-
-        .result-panel {
-            width: 100%; max-width: 800px; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(40px);
-            border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 35px; padding: 40px; margin-top: 30px; margin-bottom: 50px;
-            animation: fadeIn 0.8s ease-out; box-sizing: border-box;
-        }
+        .upload-card { position: relative; width: 100%; max-width: 520px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 35px; padding: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); z-index: 2; }
+        .result-panel { width: 100%; max-width: 800px; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(40px); border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 35px; padding: 40px; margin-top: 30px; margin-bottom: 50px; animation: fadeIn 0.8s ease-out; box-sizing: border-box; }
         .result-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #00ffff; text-transform: uppercase; margin-bottom: 15px; display: block; opacity: 0.8; }
-        
-        .transcript-box { 
-            background: rgba(255, 255, 255, 0.03); 
-            padding: 30px; 
-            border-radius: 20px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            color: #f0f0f0; 
-            line-height: 2.2; 
-            margin-bottom: 30px; 
-            font-size: 15px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            max-height: 450px; 
-            overflow-y: auto;
-            white-space: pre-wrap;
-            scrollbar-width: thin;
-            scrollbar-color: #00ffff rgba(255, 255, 255, 0.1);
-            scroll-behavior: smooth;
-        }
-
-        .timestamp {
-            color: #000 !important;
-            font-weight: 800;
-            background: #00ffff;
-            padding: 2px 10px;
-            border-radius: 6px;
-            display: inline-block;
-            margin-right: 8px;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-            vertical-align: middle;
-            line-height: 1;
-        }
-
+        .transcript-box { background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08); color: #f0f0f0; line-height: 2.2; margin-bottom: 30px; font-size: 15px; font-family: 'Plus Jakarta Sans', sans-serif; max-height: 450px; overflow-y: auto; white-space: pre-wrap; scrollbar-width: thin; scrollbar-color: #00ffff rgba(255, 255, 255, 0.1); scroll-behavior: smooth; }
+        .timestamp { color: #000 !important; font-weight: 800; background: #00ffff; padding: 2px 10px; border-radius: 6px; display: inline-block; margin-right: 8px; font-size: 12px; letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); vertical-align: middle; line-height: 1; }
         .transcript-box::-webkit-scrollbar { width: 6px; }
         .transcript-box::-webkit-scrollbar-thumb { background-color: #00ffff; border-radius: 100px; }
-
         .summary-box { background: rgba(0, 255, 255, 0.05); padding: 30px; border-radius: 20px; border: 1px solid rgba(0, 255, 255, 0.2); color: #00ffff; font-style: italic; line-height: 1.6; font-size: 18px; margin-bottom: 30px; }
-
-        .report-controls {
-            display: flex; gap: 10px; margin-bottom: 25px; align-items: center; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 20px;
-        }
-        .lang-select {
-            flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 12px; padding: 10px; color: white; font-weight: 600; outline: none;
-        }
-        .translate-action-btn {
-            background: #00ffff; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s;
-        }
+        .report-controls { display: flex; gap: 10px; margin-bottom: 25px; align-items: center; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 20px; }
+        .lang-select { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 12px; padding: 10px; color: white; font-weight: 600; outline: none; }
+        .translate-action-btn { background: #00ffff; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
         .translate-action-btn:hover { background: #00ff88; transform: scale(1.02); }
-
-        .download-actions {
-            display: flex; gap: 15px; justify-content: center; margin-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 25px;
-        }
-
-        .download-btn {
-            background: rgba(255, 255, 255, 0.05); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.2); padding: 12px 25px;
-            border-radius: 15px; font-size: 13px; font-weight: 800; text-decoration: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 8px;
-        }
+        .download-actions { display: flex; gap: 15px; justify-content: center; margin-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 25px; }
+        .download-btn { background: rgba(255, 255, 255, 0.05); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.2); padding: 12px 25px; border-radius: 15px; font-size: 13px; font-weight: 800; text-decoration: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 8px; }
         .download-btn:hover { background: rgba(0, 255, 255, 0.1); border-color: #00ffff; transform: translateY(-3px); }
-
-        .drop-zone {
-            position: relative; padding: 40px 20px; border: 2px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 30px; display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; transition: 0.4s; background: rgba(255, 255, 255, 0.01);
-        }
-
+        .drop-zone { position: relative; padding: 40px 20px; border: 2px dashed rgba(255, 255, 255, 0.15); border-radius: 30px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.4s; background: rgba(255, 255, 255, 0.01); }
         .upload-pod { width: 80px; height: 80px; background: rgba(255, 255, 255, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; border: 1px solid rgba(0, 255, 255, 0.2); }
         .pulse-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid #00ffff; animation: ripple 2s infinite; opacity: 0; }
         #icon { font-size: 35px; filter: drop-shadow(0 0 10px #00ffff); transition: 0.3s; }
-
         @keyframes ripple { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
-
         .submit-btn { width: 100%; background: #fff; color: #000; border: none; padding: 18px; font-size: 16px; font-weight: 800; border-radius: 50px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
         .submit-btn:hover { background: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); }
         .submit-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
-
         #preview-container { display: none; margin-top: 25px; width: 100%; text-align: center; }
         #preview-container p { font-size: 11px; color: #00ffff; margin-bottom: 10px; font-weight: 800; letter-spacing: 1.5px; }
         .preview-audio-player { width: 100%; height: 40px; border-radius: 12px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
-
         .file-list-container { width: 100%; max-width: 800px; padding-bottom: 50px; }
         .file-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 15px; }
-        
         .error-message { color: #ff3c3c; font-size: 12px; font-weight: 800; margin-top: 10px; display: none; text-align: center; }
-        
         .progress-container { width: 100%; max-width: 800px; margin-top: 30px; padding: 35px; background: rgba(0, 255, 255, 0.05); border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 30px; display: none; backdrop-filter: blur(10px); }
         .progress-bar { width: 100%; height: 10px; background: rgba(0, 255, 255, 0.1); border-radius: 20px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(0, 255, 255, 0.1); }
         .progress-fill { height: 100%; background: linear-gradient(90deg, #00ffff, #00ff88, #00ffff); background-size: 200% 100%; animation: shimmer 2s linear infinite; width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 20px; }
         .progress-message { text-align: center; color: #fff; font-size: 15px; font-weight: 600; min-height: 22px; transition: 0.3s; letter-spacing: 0.5px; }
-        
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-        .success-toast { 
-            position: fixed; top: 40px; left: 50%; transform: translateX(-50%); 
-            background: #00ffff; color: #000; padding: 16px 35px; border-radius: 100px;
-            font-weight: 800; font-size: 14px; box-shadow: 0 10px 50px rgba(0,0,0,0.8);
-            z-index: 99999; opacity: 0; transition: 0.5s; pointer-events: none;
-        }
-
+        .success-toast { position: fixed; top: 40px; left: 50%; transform: translateX(-50%); background: #00ffff; color: #000; padding: 16px 35px; border-radius: 100px; font-weight: 800; font-size: 14px; box-shadow: 0 10px 50px rgba(0,0,0,0.8); z-index: 99999; opacity: 0; transition: 0.5s; pointer-events: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         audio:not(.preview-audio-player) { width: 100%; height: 35px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
     </style>
@@ -292,25 +191,22 @@
     
     <header class="nav-header">
         <div class="logo-text" onclick="window.location.reload()">TranscribeFlow</div>
-        
         <div class="user-nav">
             <span id="user-greeting" class="user-greeting" style="display:none;"></span>
-            
             <button id="login-btn" class="nav-btn btn-login" onclick="openAuth('login')">
                 <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 Login
             </button>
-            
             <button id="signup-btn" class="nav-btn btn-signup" onclick="openAuth('register')">
                 <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>
                 Sign Up
             </button>
-
             <button id="logout-btn" class="nav-btn" style="display:none; border: 1px solid #ff3c3c; color:#ff3c3c; background: transparent;" onclick="logout()">Logout</button>
         </div>
     </header>
 
-    <div class="bot-container" onclick="openAuthModal()" title="I'm watching you! (Click to login)">
+    <!-- ROBOT MASCOT -->
+    <div class="bot-container" onclick="openAuthModal()" title="Click to login">
         <div class="bot-body">
             <div class="bot-shine"></div>
             <div class="bot-screen">
@@ -320,35 +216,89 @@
         </div>
     </div>
 
-    <div id="auth-modal" class="modal-overlay">
-        <div class="auth-card">
+    <!-- ============================================================
+         AUTH MODAL — UPDATED
+    ============================================================ -->
+    <div id="auth-modal" class="modal-overlay" onclick="handleModalBgClick(event)">
+        <div class="auth-card" id="auth-card-inner">
+
+            <!-- ── LOGIN FORM ── -->
             <div id="login-form">
-                <h2 style="margin: 0 0 20px 0; font-family: 'Playfair Display', serif;">Welcome Back</h2>
-                <input type="email" id="login-email" class="auth-input" placeholder="Email Address">
+                <h2 style="margin: 0 0 6px 0; font-family: 'Playfair Display', serif;">Welcome Back</h2>
+                <p style="margin:0 0 20px; font-size:13px; color:rgba(255,255,255,0.4);">Sign in to your account</p>
+
+                <!-- Toggle: Email / Phone -->
+                <div class="login-type-toggle">
+                    <button class="toggle-pill active" id="login-by-email-pill" onclick="setLoginType('email')">📧 Email</button>
+                    <button class="toggle-pill" id="login-by-phone-pill" onclick="setLoginType('phone')">📱 Phone</button>
+                </div>
+
+                <input type="text" id="login-identifier" class="auth-input" placeholder="Email address">
                 <input type="password" id="login-password" class="auth-input" placeholder="Password">
+                <div class="auth-error" id="login-error"></div>
+
                 <button class="auth-btn" onclick="loginUser()">Log In</button>
-                <div class="toggle-text" onclick="toggleAuthMode('register')">New here? Create Account</div>
+                <a class="forgot-link" onclick="switchToForgot()">Forgot your password?</a>
+
+                <div class="auth-divider"><span>OR</span></div>
+                <div class="toggle-text">No account? <span onclick="toggleAuthMode('register')">Create one free</span></div>
             </div>
 
+            <!-- ── REGISTER FORM ── -->
             <div id="register-form" style="display:none;">
-                <h2 style="margin: 0 0 20px 0; font-family: 'Playfair Display', serif;">Join TranscribeFlow</h2>
+                <h2 style="margin: 0 0 6px 0; font-family: 'Playfair Display', serif;">Join TranscribeFlow</h2>
+                <p style="margin:0 0 20px; font-size:13px; color:rgba(255,255,255,0.4);">Create your free account</p>
+
                 <input type="text" id="reg-name" class="auth-input" placeholder="Full Name">
                 <input type="email" id="reg-email" class="auth-input" placeholder="Email Address">
-                <input type="password" id="reg-password" class="auth-input" placeholder="Create Password">
-                <button class="auth-btn" onclick="registerUser()">Sign Up</button>
-                <div class="toggle-text" onclick="toggleAuthMode('login')">Already have an account? Log In</div>
+                <input type="tel" id="reg-phone" class="auth-input" placeholder="Phone Number (optional, e.g. +91XXXXXXXXXX)">
+                <input type="password" id="reg-password" class="auth-input" placeholder="Create Password" oninput="checkPasswordStrength(this.value)">
+
+                <!-- Password strength meter -->
+                <div class="pwd-meter-wrap">
+                    <div class="pwd-meter-bar"><div class="pwd-meter-fill" id="pwd-meter-fill"></div></div>
+                    <div class="pwd-meter-text" id="pwd-meter-text">Enter a password</div>
+                </div>
+                <ul class="pwd-rules" id="pwd-rules">
+                    <li id="rule-len">At least 8 characters</li>
+                    <li id="rule-upper">One uppercase letter (A–Z)</li>
+                    <li id="rule-special">One special character (!@#$…)</li>
+                </ul>
+
+                <div class="auth-error" id="reg-error"></div>
+                <button class="auth-btn" id="reg-btn" onclick="registerUser()">Create Account</button>
+
+                <div class="auth-divider"><span>OR</span></div>
+                <div class="toggle-text">Already have an account? <span onclick="toggleAuthMode('login')">Log In</span></div>
             </div>
-            
-            <button onclick="closeAuthModal()" style="background:none; border:none; color:#666; margin-top:15px; cursor:pointer;">Close</button>
+
+            <!-- ── FORGOT PASSWORD FORM ── -->
+            <div id="forgot-form" style="display:none;">
+                <h2 style="margin: 0 0 6px 0; font-family: 'Playfair Display', serif;">Reset Password</h2>
+                <p style="margin:0 0 20px; font-size:13px; color:rgba(255,255,255,0.4);">Enter your registered email and we'll send a reset link.</p>
+
+                <input type="email" id="forgot-email" class="auth-input" placeholder="Your Email Address">
+                <div class="auth-error"   id="forgot-error"></div>
+                <div class="auth-success" id="forgot-success"></div>
+
+                <button class="auth-btn" id="forgot-btn" onclick="sendForgotPassword()">Send Reset Link</button>
+                <div class="toggle-text" style="margin-top:16px;">
+                    <span onclick="toggleAuthMode('login')">← Back to Login</span>
+                </div>
+            </div>
+
+            <button onclick="closeAuthModal()" style="background:none; border:none; color:#555; margin-top:18px; cursor:pointer; font-size:12px; letter-spacing:1px;">CLOSE</button>
         </div>
     </div>
 
+    <!-- LANDING -->
     <section id="landing-view">
         <h1 class="landing-title">Audio to Insight<br>Instantly.</h1>
         <p style="opacity: 0.5; margin-bottom: 40px; max-width: 400px; line-height: 1.6;">Leverage professional-grade AI to transcribe and summarize your meetings, lectures, and voice notes.</p>
         <button class="start-btn" onclick="enterApp()">Start Transcribing</button>
     </section>
 
+    <!-- APP VIEW (unchanged) -->
     <main id="app-view">
         <div class="hero-section">
             <h1 class="hero-headline">Full Audio Analysis</h1>
@@ -456,11 +406,13 @@
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
 
     <script>
-        let masterTranscript = ""; 
+        // ── state ──
+        let masterTranscript = "";
         let masterSummary = "";
         let isAutoScroll = false;
         let currentDisplayTranscript = "";
         let currentFilename = "";
+        let loginType = 'email'; // 'email' | 'phone'
 
         const loadingMessages = [
             "Waking up the AI models...",
@@ -473,130 +425,231 @@
             "Finalizing the linguistic structure..."
         ];
 
-        // --- BOT TRACKING & STAR EYE LOGIC ---
-        
-        // 1. Movement Tracking
+        // ============================================================
+        // BOT TRACKING & STAR EYE
+        // ============================================================
         document.addEventListener('mousemove', (e) => {
-            const eyes = document.querySelectorAll('.bot-eye');
-            eyes.forEach(eye => {
-                if (eye.classList.contains('star-mode')) return; // Don't move if in star mode
-                
+            document.querySelectorAll('.bot-eye').forEach(eye => {
+                if (eye.classList.contains('star-mode')) return;
                 const rect = eye.getBoundingClientRect();
                 const eyeX = rect.left + rect.width / 2;
                 const eyeY = rect.top + rect.height / 2;
                 const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
-                
-                // --- INCREASED DISTANCE LIMIT TO 8px FOR BETTER VISIBILITY ---
                 const distance = Math.min(8, Math.hypot(e.clientX - eyeX, e.clientY - eyeY));
-                
-                const moveX = Math.cos(angle) * distance;
-                const moveY = Math.sin(angle) * distance;
-                eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                eye.style.transform = `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`;
             });
         });
 
-        // 2. Star Eye Interaction (On Start Button Hover)
         document.addEventListener('DOMContentLoaded', () => {
-            // Select both start button and the submit button
-            const startButtons = document.querySelectorAll('.start-btn, .submit-btn'); 
-            const eyes = document.querySelectorAll('.bot-eye');
-
-            startButtons.forEach(btn => {
+            document.querySelectorAll('.start-btn, .submit-btn').forEach(btn => {
                 btn.addEventListener('mouseenter', () => {
-                    eyes.forEach(eye => {
-                        eye.classList.add('star-mode');
-                        eye.style.transform = 'translate(0, 0)'; // Reset position for star
-                    });
+                    document.querySelectorAll('.bot-eye').forEach(e => { e.classList.add('star-mode'); e.style.transform='translate(0,0)'; });
                 });
-
                 btn.addEventListener('mouseleave', () => {
-                    eyes.forEach(eye => eye.classList.remove('star-mode'));
+                    document.querySelectorAll('.bot-eye').forEach(e => e.classList.remove('star-mode'));
                 });
             });
         });
 
-        // --- AUTH LOGIC START ---
+        // ============================================================
+        // MODAL HELPERS
+        // ============================================================
         function openAuthModal() {
             const modal = document.getElementById('auth-modal');
             modal.style.display = 'flex';
-            setTimeout(() => modal.style.opacity = '1', 10);
+            setTimeout(() => { modal.style.opacity = '1'; document.getElementById('auth-card-inner').style.transform = 'scale(1)'; }, 10);
         }
-
-        function openAuth(mode) {
-            openAuthModal();
-            toggleAuthMode(mode);
-        }
-
         function closeAuthModal() {
             const modal = document.getElementById('auth-modal');
             modal.style.opacity = '0';
+            document.getElementById('auth-card-inner').style.transform = 'scale(0.9)';
             setTimeout(() => modal.style.display = 'none', 300);
         }
+        function handleModalBgClick(e) {
+            if (e.target === document.getElementById('auth-modal')) closeAuthModal();
+        }
+        function openAuth(mode) { openAuthModal(); toggleAuthMode(mode); }
 
         function toggleAuthMode(mode) {
-            if (mode === 'register') {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('register-form').style.display = 'block';
-            } else {
-                document.getElementById('register-form').style.display = 'none';
-                document.getElementById('login-form').style.display = 'block';
-            }
+            document.getElementById('login-form').style.display    = (mode === 'login')    ? 'block' : 'none';
+            document.getElementById('register-form').style.display = (mode === 'register') ? 'block' : 'none';
+            document.getElementById('forgot-form').style.display   = (mode === 'forgot')   ? 'block' : 'none';
+            clearErrors();
+        }
+        function switchToForgot() { toggleAuthMode('forgot'); }
+        function clearErrors() {
+            ['login-error','reg-error','forgot-error','forgot-success'].forEach(id => {
+                const el = document.getElementById(id); if(el) el.textContent='';
+            });
         }
 
+        // ============================================================
+        // LOGIN TYPE TOGGLE (Email / Phone)
+        // ============================================================
+        function setLoginType(type) {
+            loginType = type;
+            const emailPill = document.getElementById('login-by-email-pill');
+            const phonePill = document.getElementById('login-by-phone-pill');
+            const input     = document.getElementById('login-identifier');
+            if (type === 'email') {
+                emailPill.classList.add('active');
+                phonePill.classList.remove('active');
+                input.type = 'email';
+                input.placeholder = 'Email address';
+            } else {
+                phonePill.classList.add('active');
+                emailPill.classList.remove('active');
+                input.type = 'tel';
+                input.placeholder = 'Phone number (e.g. +91XXXXXXXXXX)';
+            }
+            input.value = '';
+        }
+
+        // ============================================================
+        // PASSWORD STRENGTH METER
+        // ============================================================
+        function checkPasswordStrength(password) {
+            const ruleLen     = document.getElementById('rule-len');
+            const ruleUpper   = document.getElementById('rule-upper');
+            const ruleSpecial = document.getElementById('rule-special');
+            const fill        = document.getElementById('pwd-meter-fill');
+            const text        = document.getElementById('pwd-meter-text');
+
+            const hasLen     = password.length >= 8;
+            const hasUpper   = /[A-Z]/.test(password);
+            const hasSpecial = /[^a-zA-Z0-9]/.test(password);
+
+            ruleLen.classList.toggle('ok', hasLen);
+            ruleUpper.classList.toggle('ok', hasUpper);
+            ruleSpecial.classList.toggle('ok', hasSpecial);
+
+            const score = [hasLen, hasUpper, hasSpecial].filter(Boolean).length;
+            const configs = {
+                0: { w: '0%',   bg: 'transparent', label: 'Enter a password' },
+                1: { w: '33%',  bg: '#ff4444',      label: 'Weak' },
+                2: { w: '66%',  bg: '#ffaa00',      label: 'Fair' },
+                3: { w: '100%', bg: '#00ffcc',      label: 'Strong ✓' },
+            };
+            const cfg = configs[score];
+            fill.style.width      = cfg.w;
+            fill.style.background = cfg.bg;
+            text.textContent      = cfg.label;
+            text.style.color      = cfg.bg === 'transparent' ? 'rgba(255,255,255,0.4)' : cfg.bg;
+        }
+
+        // ============================================================
+        // AUTH API CALLS
+        // ============================================================
         function checkLoginStatus() {
             const token = localStorage.getItem('access_token');
-            const name = localStorage.getItem('user_name');
+            const name  = localStorage.getItem('user_name');
             if (token && name) {
-                document.getElementById('login-btn').style.display = 'none';
+                document.getElementById('login-btn').style.display  = 'none';
                 document.getElementById('signup-btn').style.display = 'none';
-                document.getElementById('user-greeting').innerText = "HI, " + name;
+                document.getElementById('user-greeting').innerText   = "HI, " + name;
                 document.getElementById('user-greeting').style.display = 'block';
-                document.getElementById('logout-btn').style.display = 'flex';
+                document.getElementById('logout-btn').style.display    = 'flex';
             }
         }
 
         function registerUser() {
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
+            const name     = document.getElementById('reg-name').value.trim();
+            const email    = document.getElementById('reg-email').value.trim();
+            const phone    = document.getElementById('reg-phone').value.trim();
             const password = document.getElementById('reg-password').value;
+            const errEl    = document.getElementById('reg-error');
+            const btn      = document.getElementById('reg-btn');
+
+            errEl.textContent = '';
+
+            // Client-side quick checks
+            if (!name || !email || !password) { errEl.textContent = 'Name, email and password are required.'; return; }
+
+            const hasLen     = password.length >= 8;
+            const hasUpper   = /[A-Z]/.test(password);
+            const hasSpecial = /[^a-zA-Z0-9]/.test(password);
+            if (!hasLen || !hasUpper || !hasSpecial) {
+                errEl.textContent = 'Password does not meet all requirements above.'; return;
+            }
+
+            btn.disabled    = true;
+            btn.textContent = 'Creating account…';
 
             fetch('/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, email: email, password: password })
+                body: JSON.stringify({ name, email, phone, password })
             })
-            .then(res => res.json())
+            .then(r => r.json())
             .then(data => {
                 if (data.message) {
-                    launchToast("Registration Success! Please Login.");
+                    launchToast("Account created! Please log in.");
                     toggleAuthMode('login');
                 } else {
-                    Swal.fire('Error', data.detail || "Registration failed", 'error');
+                    errEl.textContent = data.detail || "Registration failed.";
                 }
-            });
+            })
+            .catch(() => { errEl.textContent = "Network error. Please try again."; })
+            .finally(() => { btn.disabled = false; btn.textContent = 'Create Account'; });
         }
 
         function loginUser() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password   = document.getElementById('login-password').value;
+            const errEl      = document.getElementById('login-error');
+
+            errEl.textContent = '';
+            if (!identifier || !password) { errEl.textContent = 'Please enter your credentials.'; return; }
 
             fetch('/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email, password: password })
+                body: JSON.stringify({ identifier, password })
             })
-            .then(res => res.json())
+            .then(r => r.json())
             .then(data => {
                 if (data.access_token) {
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('user_name', data.name);
                     closeAuthModal();
-                    launchToast("Logged In Successfully!");
+                    launchToast("Logged in successfully!");
                     checkLoginStatus();
                 } else {
-                    Swal.fire('Error', data.detail || "Login failed", 'error');
+                    errEl.textContent = data.detail || "Login failed.";
                 }
-            });
+            })
+            .catch(() => { errEl.textContent = "Network error. Please try again."; });
+        }
+
+        function sendForgotPassword() {
+            const email   = document.getElementById('forgot-email').value.trim();
+            const errEl   = document.getElementById('forgot-error');
+            const succEl  = document.getElementById('forgot-success');
+            const btn     = document.getElementById('forgot-btn');
+
+            errEl.textContent  = '';
+            succEl.textContent = '';
+            if (!email) { errEl.textContent = 'Please enter your email address.'; return; }
+
+            btn.disabled    = true;
+            btn.textContent = 'Sending…';
+
+            fetch('/auth/forgot_password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.message) {
+                    succEl.textContent = data.message;
+                    document.getElementById('forgot-email').value = '';
+                } else {
+                    errEl.textContent = data.detail || "Something went wrong.";
+                }
+            })
+            .catch(() => { errEl.textContent = "Network error. Please try again."; })
+            .finally(() => { btn.disabled = false; btn.textContent = 'Send Reset Link'; });
         }
 
         function logout() {
@@ -604,51 +657,40 @@
             localStorage.removeItem('user_name');
             location.reload();
         }
-        // --- AUTH LOGIC END ---
 
+        // ============================================================
+        // EXISTING FUNCTIONALITY (unchanged)
+        // ============================================================
         function confirmPurge() {
             Swal.fire({
                 title: 'Purge All History?',
                 text: "This will permanently delete all recordings and transcripts!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ff8c00',
-                cancelButtonColor: '#3085d6',
+                icon: 'warning', showCancelButton: true,
+                confirmButtonColor: '#ff8c00', cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Yes, Purge All',
-                background: '#1a1a1a',
-                color: '#fff',
-                iconColor: '#ff8c00'
+                background: '#1a1a1a', color: '#fff', iconColor: '#ff8c00'
             }).then((result) => {
                 if (result.isConfirmed) {
                     const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '/clear_all';
-                    document.body.appendChild(form);
-                    form.submit();
+                    form.method = 'POST'; form.action = '/clear_all';
+                    document.body.appendChild(form); form.submit();
                 }
             });
         }
 
         function confirmDelete(filename, elementId) {
             Swal.fire({
-                title: 'Delete File?',
-                text: `You are about to delete ${filename}`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ff3c3c',
-                cancelButtonColor: '#3085d6',
+                title: 'Delete File?', text: `You are about to delete ${filename}`,
+                icon: 'warning', showCancelButton: true,
+                confirmButtonColor: '#ff3c3c', cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Yes, delete it!',
-                background: '#1a1a1a',
-                color: '#fff',
-                iconColor: '#ff3c3c'
+                background: '#1a1a1a', color: '#fff', iconColor: '#ff3c3c'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`/delete/${filename}`, { method: 'POST' })
-                    .then(res => {
+                    fetch(`/delete/${filename}`, { method: 'POST' }).then(res => {
                         if (res.ok) {
-                            if (document.getElementById(elementId)) {
-                                document.getElementById(elementId).style.display = 'none';
-                            }
+                            const el = document.getElementById(elementId);
+                            if (el) el.style.display = 'none';
                             launchToast("FILE DELETED", "delete");
                         }
                     });
@@ -658,11 +700,11 @@
 
         function searchTerm() {
             const query = document.getElementById('transcript-search').value.toLowerCase();
-            const box = document.getElementById('dynamic-transcript-box');
+            const box   = document.getElementById('dynamic-transcript-box');
             let text = currentDisplayTranscript.replace(/\[(\d{2}:\d{2}(?::\d{2})?\s*-\s*\d{2}:\d{2}(?::\d{2})?)\]/g, '<span class="timestamp">$1</span>');
             if (query.length > 1) {
                 const regex = new RegExp(`(${query})`, 'gi');
-                text = text.replace(regex, '<mark style="background: #ffff00; color: #000; border-radius: 2px; padding: 0 2px;">$1</mark>');
+                text = text.replace(regex, '<mark style="background:#ffff00;color:#000;border-radius:2px;padding:0 2px;">$1</mark>');
             }
             box.innerHTML = text;
         }
@@ -670,9 +712,9 @@
         function toggleAutoScroll() {
             isAutoScroll = !isAutoScroll;
             const btn = document.getElementById('autoscroll-btn');
-            btn.innerText = isAutoScroll ? "Auto-Scroll: ON" : "Auto-Scroll: OFF";
-            btn.style.background = isAutoScroll ? "#00ffff" : "rgba(255,255,255,0.1)";
-            btn.style.color = isAutoScroll ? "#000" : "#fff";
+            btn.innerText         = isAutoScroll ? "Auto-Scroll: ON" : "Auto-Scroll: OFF";
+            btn.style.background  = isAutoScroll ? "#00ffff" : "rgba(255,255,255,0.1)";
+            btn.style.color       = isAutoScroll ? "#000" : "#fff";
         }
 
         function handleAutoScroll() {
@@ -684,11 +726,11 @@
 
         window.enterApp = function() {
             const landingView = document.getElementById('landing-view');
-            const appView = document.getElementById('app-view');
+            const appView     = document.getElementById('app-view');
             landingView.style.opacity = '0';
             setTimeout(() => {
                 landingView.style.display = 'none';
-                appView.style.display = 'flex';
+                appView.style.display     = 'flex';
                 setTimeout(() => { appView.style.opacity = '1'; appView.style.transform = 'translateY(0)'; }, 50);
             }, 800);
         };
@@ -697,14 +739,12 @@
             if (typeof VANTA !== 'undefined') {
                 VANTA.WAVES({ el: "#vanta-bg", mouseControls: true, color: 0x070707, waveHeight: 15 });
             }
-
-            // Check if user is logged in
             checkLoginStatus();
 
-            const input = document.getElementById('audio-input');
+            const input       = document.getElementById('audio-input');
             const nameDisplay = document.getElementById('file-name-display');
             const audioPreview = document.getElementById('audio-live-preview');
-            const submitBtn = document.getElementById('submit-btn');
+            const submitBtn   = document.getElementById('submit-btn');
 
             input.onchange = (e) => {
                 const file = e.target.files[0];
@@ -716,60 +756,42 @@
                     document.getElementById('icon').innerHTML = "✅";
                 }
             };
-            
+
             const uploadForm = document.getElementById('main-upload-form');
             uploadForm.onsubmit = function(e) {
                 e.preventDefault();
 
-                // --- FREE TRIAL CHECK ---
-                const token = localStorage.getItem('access_token');
+                const token       = localStorage.getItem('access_token');
                 const hasUsedFree = localStorage.getItem('free_trial_used');
 
                 if (!token && hasUsedFree) {
                     Swal.fire({
                         title: 'Free Trial Ended',
                         text: 'You have used your free transcription. Please Sign Up or Login to continue!',
-                        icon: 'info',
-                        confirmButtonText: 'Sign Up Now',
-                        confirmButtonColor: '#00ffff',
-                        background: '#1a1a1a',
-                        color: '#fff'
-                    }).then(() => {
-                        openAuth('register');
-                    });
+                        icon: 'info', confirmButtonText: 'Sign Up Now',
+                        confirmButtonColor: '#00ffff', background: '#1a1a1a', color: '#fff'
+                    }).then(() => { openAuth('register'); });
                     return;
                 }
 
                 submitBtn.disabled = true;
                 submitBtn.innerText = "Uploading...";
-                
-                const formData = new FormData(uploadForm);
-                const headers = {};
-                if (token) {
-                    headers['Authorization'] = 'Bearer ' + token;
-                }
 
-                fetch('/upload', { 
-                    method: 'POST', 
-                    body: formData,
-                    headers: headers 
-                })
+                const formData = new FormData(uploadForm);
+                const headers  = {};
+                if (token) headers['Authorization'] = 'Bearer ' + token;
+
+                fetch('/upload', { method: 'POST', body: formData, headers })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.filename) { 
+                    if (data.filename) {
                         if (!token) localStorage.setItem('free_trial_used', 'true');
                         launchToast("UPLOAD SUCCESSFUL");
                         document.getElementById('progress-container').style.display = 'block';
-                        currentFilename = data.filename; 
+                        currentFilename = data.filename;
                         pollStatus(data.filename);
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Upload Error',
-                            text: data.error || "Unknown Error",
-                            background: '#1a1a1a',
-                            color: '#fff'
-                        });
+                        Swal.fire({ icon:'error', title:'Upload Error', text: data.error||"Unknown Error", background:'#1a1a1a', color:'#fff' });
                         submitBtn.disabled = false;
                         submitBtn.innerText = "Transcribe Now";
                     }
@@ -787,43 +809,36 @@
                 fetch(`/check_status/${encodeURIComponent(filename)}`)
                 .then(res => res.json())
                 .then(data => {
-                    const fill = document.getElementById('progress-fill');
+                    const fill        = document.getElementById('progress-fill');
                     const percentText = document.getElementById('progress-percent');
-                    const msgText = document.getElementById('progress-message');
+                    const msgText     = document.getElementById('progress-message');
 
-                    if (data.progress) {
-                        fill.style.width = data.progress + '%';
-                        percentText.textContent = data.progress + '%';
-                    }
-                    
+                    if (data.progress) { fill.style.width = data.progress + '%'; percentText.textContent = data.progress + '%'; }
+
                     if (data.status === 'processing') {
-                        if (data.progress > 65 && data.progress < 85) {
-                            msgText.textContent = "AI generating concise summary...";
-                        } else {
-                            msgText.textContent = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
-                        }
+                        msgText.textContent = (data.progress > 65 && data.progress < 85)
+                            ? "AI generating concise summary..."
+                            : loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
                     }
 
                     if (data.status === 'error') {
                         clearInterval(interval);
-                        Swal.fire({ icon: 'error', title: 'Processing Failed', text: data.message });
-                        submitBtn.disabled = false;
-                        submitBtn.innerText = "Transcribe Now";
+                        Swal.fire({ icon:'error', title:'Processing Failed', text: data.message });
+                        document.getElementById('submit-btn').disabled = false;
+                        document.getElementById('submit-btn').innerText = "Transcribe Now";
                         document.getElementById('progress-container').style.display = 'none';
                     }
 
                     if (data.status === 'completed') {
                         clearInterval(interval);
-                        masterTranscript = data.transcript; 
-                        masterSummary = data.summary;
-                        
+                        masterTranscript = data.transcript;
+                        masterSummary    = data.summary;
                         document.getElementById('current-download-txt').href = `/download/${encodeURIComponent(filename)}?type=txt&lang=en`;
                         document.getElementById('current-download-pdf').href = `/download/${encodeURIComponent(filename)}?type=pdf&lang=en`;
-                        
                         displayResults(data.transcript, data.summary);
                         document.getElementById('progress-container').style.display = 'none';
                         document.getElementById('submit-btn').innerText = "Transcribe Now";
-                        document.getElementById('submit-btn').disabled = false;
+                        document.getElementById('submit-btn').disabled  = false;
                     }
                 })
                 .catch(err => console.error("Polling error:", err));
@@ -831,9 +846,9 @@
         }
 
         function translateReport() {
-            const targetLang = document.getElementById('report-lang-select').value;
+            const targetLang  = document.getElementById('report-lang-select').value;
             const translateBtn = document.getElementById('translate-btn');
-            
+
             if (targetLang === 'en') {
                 document.getElementById('current-download-txt').href = `/download/${encodeURIComponent(currentFilename)}?type=txt&lang=en`;
                 document.getElementById('current-download-pdf').href = `/download/${encodeURIComponent(currentFilename)}?type=pdf&lang=en`;
@@ -841,17 +856,13 @@
                 return;
             }
 
-            translateBtn.innerText = "Translating...";
-            translateBtn.disabled = true;
+            translateBtn.innerText  = "Translating...";
+            translateBtn.disabled   = true;
 
             fetch('/translate_on_fly', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    transcript: masterTranscript, 
-                    summary: masterSummary,
-                    target: targetLang 
-                })
+                body: JSON.stringify({ transcript: masterTranscript, summary: masterSummary, target: targetLang })
             })
             .then(res => res.json())
             .then(data => {
@@ -862,43 +873,38 @@
                     launchToast("Language Updated!");
                 }
                 translateBtn.innerText = "Update Language";
-                translateBtn.disabled = false;
+                translateBtn.disabled  = false;
             })
-            .catch(() => {
-                launchToast("Translation Error", "delete");
-                translateBtn.disabled = false;
-            });
+            .catch(() => { launchToast("Translation Error", "delete"); translateBtn.disabled = false; });
         }
 
         function displayResults(transcript, summary) {
-            const resultPanel = document.getElementById('dynamic-result-panel');
+            const resultPanel  = document.getElementById('dynamic-result-panel');
             const transcriptBox = document.getElementById('dynamic-transcript-box');
-            const summaryBox = document.getElementById('dynamic-summary-box');
-            
+            const summaryBox   = document.getElementById('dynamic-summary-box');
+
             currentDisplayTranscript = transcript;
             document.getElementById('transcript-search').value = "";
 
             const highlighted = transcript.replace(/\[(\d{2}:\d{2}(?::\d{2})?\s*-\s*\d{2}:\d{2}(?::\d{2})?)\]/g, '<span class="timestamp">$1</span>');
-            
             transcriptBox.innerHTML = highlighted;
-            summaryBox.textContent = summary || "No summary available (text might be too short)";
-            
+            summaryBox.textContent  = summary || "No summary available (text might be too short)";
+
             resultPanel.style.display = 'block';
-            
-            if (!isAutoScroll) {
-                resultPanel.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                handleAutoScroll();
-            }
+            if (!isAutoScroll) { resultPanel.scrollIntoView({ behavior: 'smooth' }); }
+            else { handleAutoScroll(); }
         }
 
         function launchToast(message, type = "success") {
             const toast = document.getElementById('toast-message');
-            toast.textContent = message;
+            toast.textContent    = message;
             toast.style.background = (type === "delete") ? "#ff3c3c" : "#00ffff";
-            toast.style.opacity = '1';
+            toast.style.opacity  = '1';
             setTimeout(() => { toast.style.opacity = '0'; }, 3000);
         }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAuthModal(); });
     </script>
 </body>
 </html>
