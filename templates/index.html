@@ -57,7 +57,7 @@
         .bot-shine { position: absolute; top: 15%; right: 20%; width: 20px; height: 10px; background: rgba(255,255,255,0.8); border-radius: 50%; transform: rotate(-45deg); }
 
         /* ========================================================
-           AUTH MODAL — UPDATED
+           AUTH MODAL
         ======================================================== */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -85,20 +85,14 @@
         .auth-input:focus { border-color: #00ffff; background: rgba(0,255,255,0.04); }
         .auth-input::placeholder { color: rgba(255,255,255,0.35); }
 
-        /* Login-type toggle (Email / Phone) */
-        .login-type-toggle {
-            display: flex; gap: 8px; margin-bottom: 16px;
-        }
+        .login-type-toggle { display: flex; gap: 8px; margin-bottom: 16px; }
         .toggle-pill {
             flex: 1; padding: 9px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
             background: transparent; color: rgba(255,255,255,0.5); font-weight: 700;
             font-size: 12px; cursor: pointer; letter-spacing: 0.5px; transition: 0.25s;
         }
-        .toggle-pill.active {
-            background: #00ffff; color: #000; border-color: #00ffff;
-        }
+        .toggle-pill.active { background: #00ffff; color: #000; border-color: #00ffff; }
 
-        /* Password strength meter */
         .pwd-meter-wrap { text-align: left; margin-bottom: 12px; }
         .pwd-meter-bar { height: 4px; border-radius: 10px; background: rgba(255,255,255,0.1); overflow: hidden; margin-bottom: 5px; }
         .pwd-meter-fill { height: 100%; width: 0%; border-radius: 10px; transition: width 0.3s, background 0.3s; }
@@ -126,27 +120,109 @@
         .toggle-text span { color: #00ffff; font-weight: 800; text-decoration: underline; }
         .forgot-link { display: block; margin-top: 10px; font-size: 12px; color: rgba(0,255,255,0.7); cursor: pointer; transition: color 0.2s; }
         .forgot-link:hover { color: #00ffff; }
-
         .auth-error { color: #ff4444; font-size: 12px; font-weight: 700; margin-top: 8px; min-height: 16px; }
         .auth-success { color: #00ffcc; font-size: 13px; font-weight: 700; margin-top: 8px; min-height: 16px; line-height: 1.5; }
 
         /* ========================================================
-           EXISTING STYLES (unchanged)
+           HOW IT WORKS SECTION (NO LINES)
+        ======================================================== */
+        .how-it-works-section {
+            width: 100%; max-width: 1200px; padding: 0 20px; margin-bottom: 60px;
+            opacity: 0; animation: fadeIn 1s ease-out 0.5s forwards; position: relative; z-index: 2; box-sizing: border-box;
+        }
+        .section-header { text-align: center; margin-bottom: 70px; }
+        .section-title {
+            font-family: 'Playfair Display', serif; font-size: 28px; font-style: italic; font-weight: 900;
+            color: #fff; text-shadow: 0 0 20px rgba(0,255,255,0.5); position: relative; padding-bottom: 15px;
+        }
+        /* REMOVED THE BLUE UNDERLINE (::after) HERE */
+
+        .steps-container { 
+            display: flex; justify-content: space-between; gap: 30px; position: relative; flex-wrap: wrap; 
+        }
+        
+        .step-card {
+            flex: 1; min-width: 220px;
+            background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(10,10,10,0.95));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px); border-radius: 24px; padding: 40px 25px;
+            text-align: center; position: relative; 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .step-card:hover {
+            transform: translateY(-12px); 
+            border-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0,255,255,0.05);
+        }
+
+        /* Giant Watermark Number */
+        .step-watermark {
+            position: absolute; top: -10px; right: -10px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 900; font-size: 80px;
+            color: rgba(255,255,255,0.02); line-height: 1; pointer-events: none;
+            transition: 0.4s;
+        }
+        .step-card:hover .step-watermark {
+            color: rgba(0, 255, 255, 0.08); transform: scale(1.1);
+        }
+
+        /* Icon Styling */
+        .icon-box {
+            width: 80px; height: 80px; margin: 0 auto 25px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 2;
+            transition: 0.4s;
+        }
+        .step-card:hover .icon-box {
+            background: rgba(0, 255, 255, 0.1); border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+        
+        .step-icon { width: 40px; height: 40px; fill: rgba(255,255,255,0.7); transition: 0.4s; }
+        .step-card:hover .step-icon { fill: #00ffff; transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 8px #00ffff); }
+
+        .step-title { 
+            font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px; letter-spacing: 0.5px; position: relative; z-index: 2;
+        }
+        .step-desc { 
+            font-size: 14px; color: rgba(255, 255, 255, 0.5); line-height: 1.6; position: relative; z-index: 2;
+        }
+        
+        /* Bottom Glow Bar */
+        .step-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: #00ffff; transform: scaleX(0); transform-origin: left;
+            transition: transform 0.4s ease; box-shadow: 0 -5px 15px #00ffff;
+        }
+        .step-card:hover::after { transform: scaleX(1); }
+
+        @media (max-width: 900px) {
+            .steps-container { flex-direction: column; gap: 40px; }
+            .section-title { font-size: 24px; }
+        }
+
+        /* ========================================================
+           LANDING & APP
         ======================================================== */
         #landing-view {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; width: 100%; text-align: center; z-index: 5;
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            min-height: 100vh; width: 100%; text-align: center; z-index: 5;
+            padding-top: 100px; padding-bottom: 50px;
+            transition: opacity 0.8s ease, transform 0.8s ease; box-sizing: border-box;
         }
         .landing-title { font-size: clamp(48px, 8vw, 90px); font-weight: 800; letter-spacing: -4px; line-height: 0.9; margin-bottom: 30px; background: linear-gradient(to bottom, #fff, #666); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .start-btn { background: #fff; color: #000; border: none; padding: 22px 50px; font-size: 18px; font-weight: 800; border-radius: 100px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
+        .start-btn { background: #fff; color: #000; border: none; padding: 22px 50px; font-size: 18px; font-weight: 800; border-radius: 100px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 30px rgba(255,255,255,0.1); margin-top: 20px; }
         .start-btn:hover { transform: scale(1.05); background: #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
 
-        #app-view { display: none; flex-direction: column; align-items: center; width: 100%; padding: 120px 20px 80px 20px; opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
+        #app-view { display: none; flex-direction: column; align-items: center; width: 100%; padding: 120px 20px 80px 20px; opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; box-sizing: border-box; }
         .hero-section { text-align: center; margin-bottom: 50px; }
         .hero-headline { font-size: clamp(32px, 5vw, 64px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; background: linear-gradient(135deg, #ffffff 0%, #a5a5a5 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
         
-        .upload-card { position: relative; width: 100%; max-width: 520px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 35px; padding: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); z-index: 2; }
+        .upload-card { position: relative; width: 100%; max-width: 520px; background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 35px; padding: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); z-index: 2; box-sizing: border-box; }
         .result-panel { width: 100%; max-width: 800px; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(40px); border: 1px solid rgba(0, 255, 255, 0.2); border-radius: 35px; padding: 40px; margin-top: 30px; margin-bottom: 50px; animation: fadeIn 0.8s ease-out; box-sizing: border-box; }
         .result-label { font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #00ffff; text-transform: uppercase; margin-bottom: 15px; display: block; opacity: 0.8; }
         .transcript-box { background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08); color: #f0f0f0; line-height: 2.2; margin-bottom: 30px; font-size: 15px; font-family: 'Plus Jakarta Sans', sans-serif; max-height: 450px; overflow-y: auto; white-space: pre-wrap; scrollbar-width: thin; scrollbar-color: #00ffff rgba(255, 255, 255, 0.1); scroll-behavior: smooth; }
@@ -205,7 +281,6 @@
         </div>
     </header>
 
-    <!-- ROBOT MASCOT -->
     <div class="bot-container" onclick="openAuthModal()" title="Click to login">
         <div class="bot-body">
             <div class="bot-shine"></div>
@@ -216,45 +291,32 @@
         </div>
     </div>
 
-    <!-- ============================================================
-         AUTH MODAL — UPDATED
-    ============================================================ -->
     <div id="auth-modal" class="modal-overlay" onclick="handleModalBgClick(event)">
         <div class="auth-card" id="auth-card-inner">
 
-            <!-- ── LOGIN FORM ── -->
             <div id="login-form">
                 <h2 style="margin: 0 0 6px 0; font-family: 'Playfair Display', serif;">Welcome Back</h2>
                 <p style="margin:0 0 20px; font-size:13px; color:rgba(255,255,255,0.4);">Sign in to your account</p>
-
-                <!-- Toggle: Email / Phone -->
                 <div class="login-type-toggle">
                     <button class="toggle-pill active" id="login-by-email-pill" onclick="setLoginType('email')">📧 Email</button>
                     <button class="toggle-pill" id="login-by-phone-pill" onclick="setLoginType('phone')">📱 Phone</button>
                 </div>
-
                 <input type="text" id="login-identifier" class="auth-input" placeholder="Email address">
                 <input type="password" id="login-password" class="auth-input" placeholder="Password">
                 <div class="auth-error" id="login-error"></div>
-
                 <button class="auth-btn" onclick="loginUser()">Log In</button>
                 <a class="forgot-link" onclick="switchToForgot()">Forgot your password?</a>
-
                 <div class="auth-divider"><span>OR</span></div>
                 <div class="toggle-text">No account? <span onclick="toggleAuthMode('register')">Create one free</span></div>
             </div>
 
-            <!-- ── REGISTER FORM ── -->
             <div id="register-form" style="display:none;">
                 <h2 style="margin: 0 0 6px 0; font-family: 'Playfair Display', serif;">Join TranscribeFlow</h2>
                 <p style="margin:0 0 20px; font-size:13px; color:rgba(255,255,255,0.4);">Create your free account</p>
-
                 <input type="text" id="reg-name" class="auth-input" placeholder="Full Name">
                 <input type="email" id="reg-email" class="auth-input" placeholder="Email Address">
-                <input type="tel" id="reg-phone" class="auth-input" placeholder="Phone Number (optional, e.g. +91XXXXXXXXXX)">
+                <input type="tel" id="reg-phone" class="auth-input" placeholder="Phone Number (optional)">
                 <input type="password" id="reg-password" class="auth-input" placeholder="Create Password" oninput="checkPasswordStrength(this.value)">
-
-                <!-- Password strength meter -->
                 <div class="pwd-meter-wrap">
                     <div class="pwd-meter-bar"><div class="pwd-meter-fill" id="pwd-meter-fill"></div></div>
                     <div class="pwd-meter-text" id="pwd-meter-text">Enter a password</div>
@@ -264,23 +326,18 @@
                     <li id="rule-upper">One uppercase letter (A–Z)</li>
                     <li id="rule-special">One special character (!@#$…)</li>
                 </ul>
-
                 <div class="auth-error" id="reg-error"></div>
                 <button class="auth-btn" id="reg-btn" onclick="registerUser()">Create Account</button>
-
                 <div class="auth-divider"><span>OR</span></div>
                 <div class="toggle-text">Already have an account? <span onclick="toggleAuthMode('login')">Log In</span></div>
             </div>
 
-            <!-- ── FORGOT PASSWORD FORM ── -->
             <div id="forgot-form" style="display:none;">
                 <h2 style="margin: 0 0 6px 0; font-family: 'Playfair Display', serif;">Reset Password</h2>
-                <p style="margin:0 0 20px; font-size:13px; color:rgba(255,255,255,0.4);">Enter your registered email and we'll send a reset link.</p>
-
+                <p style="margin:0 0 20px; font-size:13px; color:rgba(255,255,255,0.4);">Enter your registered email.</p>
                 <input type="email" id="forgot-email" class="auth-input" placeholder="Your Email Address">
                 <div class="auth-error"   id="forgot-error"></div>
                 <div class="auth-success" id="forgot-success"></div>
-
                 <button class="auth-btn" id="forgot-btn" onclick="sendForgotPassword()">Send Reset Link</button>
                 <div class="toggle-text" style="margin-top:16px;">
                     <span onclick="toggleAuthMode('login')">← Back to Login</span>
@@ -291,14 +348,76 @@
         </div>
     </div>
 
-    <!-- LANDING -->
     <section id="landing-view">
         <h1 class="landing-title">Audio to Insight<br>Instantly.</h1>
-        <p style="opacity: 0.5; margin-bottom: 40px; max-width: 400px; line-height: 1.6;">Leverage professional-grade AI to transcribe and summarize your meetings, lectures, and voice notes.</p>
+        <p style="opacity: 0.5; margin-bottom: 50px; max-width: 400px; line-height: 1.6;">Leverage professional-grade AI to transcribe and summarize your meetings, lectures, and voice notes.</p>
+        
+        <div class="how-it-works-section">
+            <div class="section-header">
+                <span class="section-title">Workflow Protocol</span>
+            </div>
+
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-watermark">01</div>
+                    <div class="icon-box">
+                        <svg class="step-icon" viewBox="0 0 24 24">
+                            <path d="M19.35,10.04C18.67,6.59,15.64,4,12,4C9.11,4,6.6,5.64,5.35,8.04C2.34,8.36,0,10.91,0,14c0,3.31,2.69,6,6,6h13 c2.76,0,5-2.24,5-5C24,12.36,21.95,10.22,19.35,10.04z M14,13v4h-4v-4H7l5-5l5,5H14z"/>
+                            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+                            <circle cx="19" cy="5" r="1.5" fill="#00ffff"/>
+                            <circle cx="5" cy="19" r="1" fill="#00ffff"/>
+                        </svg>
+                    </div>
+                    <div class="step-title">Secure Upload</div>
+                    <p class="step-desc">Drag & drop encrypted audio files (MP3/WAV) directly into our secure cloud vault.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-watermark">02</div>
+                    <div class="icon-box">
+                        <svg class="step-icon" viewBox="0 0 24 24">
+                            <path d="M22,12c0-5.52-4.48-10-10-10S2,6.48,2,12s4.48,10,10,10S22,17.52,22,12z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8 S16.41,20,12,20z"/>
+                            <path d="M12,6c-3.31,0-6,2.69-6,6s2.69,6,6,6s6-2.69,6-6S15.31,6,12,6z M12,16c-2.21,0-4-1.79-4-4s1.79-4,4-4s4,1.79,4,4 S14.21,16,12,16z"/>
+                            <rect x="11" y="2" width="2" height="4" fill="#00ffff"/>
+                            <rect x="11" y="18" width="2" height="4" fill="#00ffff"/>
+                            <rect x="2" y="11" width="4" height="2" fill="#00ffff"/>
+                            <rect x="18" y="11" width="4" height="2" fill="#00ffff"/>
+                        </svg>
+                    </div>
+                    <div class="step-title">Parameter Setup</div>
+                    <p class="step-desc">Select from multiple available languages and enable advanced speaker identification algorithms.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-watermark">03</div>
+                    <div class="icon-box">
+                        <svg class="step-icon" viewBox="0 0 24 24">
+                             <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8c0-4.41,3.59-8,8-8 s8,3.59,8,8C20,16.41,16.41,20,12,20z"/>
+                             <circle cx="12" cy="12" r="3" fill="#00ffff"/>
+                             <path d="M12,5v3 M12,16v3 M5,12h3 M16,12h3 M7.05,7.05l2.12,2.12 M14.83,14.83l2.12,2.12 M7.05,16.95l2.12-2.12 M14.83,9.17l2.12-2.12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="step-title">Neural Processing</div>
+                    <p class="step-desc">Our Whisper asr  engine and BART summarizer analyzes comlex audio  to extract text and actionable insights.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-watermark">04</div>
+                    <div class="icon-box">
+                        <svg class="step-icon" viewBox="0 0 24 24">
+                            <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5 L18.5,9H13z"/>
+                            <polygon points="18,20 18,22 22,22 22,20" fill="#00ffff"/>
+                            <polygon points="2,2 2,4 6,4 6,2" fill="#00ffff"/>
+                        </svg>
+                    </div>
+                    <div class="step-title">Data Extraction</div>
+                    <p class="step-desc">Receive your transcription in multiple formats (TXT/PDF) with auto-summaries attached.</p>
+                </div>
+            </div>
+        </div>
         <button class="start-btn" onclick="enterApp()">Start Transcribing</button>
     </section>
 
-    <!-- APP VIEW (unchanged) -->
     <main id="app-view">
         <div class="hero-section">
             <h1 class="hero-headline">Full Audio Analysis</h1>
@@ -568,7 +687,7 @@
             const hasLen     = password.length >= 8;
             const hasUpper   = /[A-Z]/.test(password);
             const hasSpecial = /[^a-zA-Z0-9]/.test(password);
-            if (!hasLen || !hasUpper || !hasSpecial) {
+            if (!hasLen || !hasUpper || !hasSpecial) { 
                 errEl.textContent = 'Password does not meet all requirements above.'; return;
             }
 
@@ -659,7 +778,7 @@
         }
 
         // ============================================================
-        // EXISTING FUNCTIONALITY (unchanged)
+        // APP FUNCTIONALITY
         // ============================================================
         function confirmPurge() {
             Swal.fire({
@@ -903,7 +1022,6 @@
             setTimeout(() => { toast.style.opacity = '0'; }, 3000);
         }
 
-        // Close modal on Escape key
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAuthModal(); });
     </script>
 </body>
