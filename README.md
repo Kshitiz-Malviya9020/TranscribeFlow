@@ -209,20 +209,6 @@ python-dotenv
 - Never commit your `.env` file — it is listed in `.gitignore`
 - The `users.json` file contains hashed passwords — also excluded from git
 
----
-
-## 📝 .env.example
-
-Include this file in your repo so others know what variables to set:
-
-```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASSWORD=your_app_password_here
-SMTP_FROM=your_email@gmail.com
-APP_BASE_URL=http://127.0.0.1:5000
-```
 
 ---
 

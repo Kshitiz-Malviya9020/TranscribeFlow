@@ -1,92 +1,90 @@
-from dotenv import load_dotenv
-load_dotenv()
+from flask import Flask, session
+from config import Config
+from auth.routes import auth_bp
+from transcription.routes import transcription_bp
 import os
-import time
-import threading
-import io
-import random
-import datetime
-import uuid
-import jwt
-import json
-import secrets
-import re
-from flask import Flask, render_template, request, jsonify, send_from_directory, Response
-from werkzeug.utils import secure_filename
-import whisper
-from deep_translator import GoogleTranslator
-from fpdf import FPDF
-import arabic_reshaper
-from bidi.algorithm import get_display
-from passlib.context import CryptContext
-from transformers import BartForConditionalGeneration, BartTokenizer
 
-# --- EMAIL IMPORTS (for password reset) ---
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+# Ensure upload folder exists
+if not os.path.exists(Config.UPLOAD_FOLDER):
+    os.makedirs(Config.UPLOAD_FOLDER)
 
 app = Flask(__name__)
-app.secret_key = "transcribe_flow_secret_key"
+app.config.from_object(Config)
 
+<<<<<<< HEAD
+app.secret_key = Config.SECRET_KEY
+app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = Config.MAX_CONTENT_LENGTH
+
+# Register blueprints
+app.register_blueprint(auth_bp)
+app.register_blueprint(transcription_bp)
+
+if __name__ == "__main__":
+    app.run(debug=False, threaded=True)
+=======
 # ============================================================
 # EMAIL CONFIGURATION (for password reset)
-# Fill in your SMTP credentials here or use environment vars.
-# For Gmail: enable "App Passwords" in your Google account.
 # ============================================================
 SMTP_HOST     = os.getenv("SMTP_HOST")
-SMTP_PORT     = int(os.getenv("SMTP_PORT"))
-SMTP_USER     = os.getenv("SMTP_USER")   # ← change this in .env to your actual email address (same as SMTP_FROM if possible)
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")       # ← change this in .env to your actual app password
-SMTP_FROM     = os.getenv("SMTP_FROM",     SMTP_USER)
-APP_BASE_URL  = os.getenv("APP_BASE_URL",  "http://127.0.0.1:5000")  # ← change for production deployment (e.g. https://yourdomain.com)
+SMTP_PORT     = int(os.getenv("SMTP_PORT") or 587)
+SMTP_USER     = os.getenv("SMTP_USER")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+SMTP_FROM     = os.getenv("SMTP_FROM", SMTP_USER)
+APP_BASE_URL  = os.getenv("APP_BASE_URL", "http://127.0.0.1:5000")
 
 # --- AUTH CONFIGURATION ---
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 ALGORITHM = "HS256"
 DB_FILE = "users.json"
+GUEST_USAGE_FILE = "guest_usage.json" # <--- Added for Free Trial Persistence
 
-# In-memory store for password-reset tokens  {token: {email, expires}}
+# In-memory store for password-reset tokens {token: {email, expires}}
 reset_tokens = {}
 
 # ============================================================
-# DATABASE PERSISTENCE HELPERS  (unchanged)
+# DATABASE PERSISTENCE HELPERS
 # ============================================================
-def load_users():
-    if os.path.exists(DB_FILE):
+def load_json_db(filepath):
+    """Generic loader for JSON databases."""
+    if os.path.exists(filepath):
         try:
-            with open(DB_FILE, 'r') as f:
+            with open(filepath, 'r') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Error loading database: {e}")
+            print(f"Error loading {filepath}: {e}")
             return {}
     return {}
 
-def save_users():
+def save_json_db(filepath, data):
+    """Generic saver for JSON databases."""
     try:
-        with open(DB_FILE, 'w') as f:
-            json.dump(users_db, f, indent=4)
+        with open(filepath, 'w') as f:
+            json.dump(data, f, indent=4)
     except Exception as e:
-        print(f"Error saving database: {e}")
+        print(f"Error saving {filepath}: {e}")
 
-users_db = load_users()
-print(f"Database loaded. {len(users_db)} users found.")
+# Load Databases
+users_db = load_json_db(DB_FILE)
+guest_usage = load_json_db(GUEST_USAGE_FILE)
+print(f"Database loaded. Users: {len(users_db)}, Guests Tracked: {len(guest_usage)}")
 
 # ============================================================
-# UPLOAD / APP CONFIGURATION  (unchanged)
+# UPLOAD / APP CONFIGURATION
 # ============================================================
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
-ALLOWED_EXTENSIONS = {'mp3', 'wav'}
+ALLOWED_EXTENSIONS = {'mp3', 'wav', 'm4a'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB Limit
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
+# In-memory tracking of processing jobs
 processing_jobs = {}
 
 # ============================================================
-# MODELS LOADING  (unchanged)
+# MODELS LOADING
 # ============================================================
 print("Loading Whisper Model...")
 try:
@@ -106,7 +104,7 @@ except Exception as e:
     print(f"WARNING: Could not load BART model. Details: {e}")
 
 # ============================================================
-# USER CLASS  (extended with phone)
+# USER CLASS
 # ============================================================
 class User:
     def __init__(self, name, email, phone=""):
@@ -141,15 +139,7 @@ def create_token(email):
     }
     return jwt.encode(payload, app.secret_key, algorithm=ALGORITHM)
 
-# --- NEW: Password strength validator ---
 def validate_password(password):
-    """
-    Returns (is_valid: bool, error_message: str)
-    Rules:
-      - At least 8 characters
-      - At least one uppercase letter
-      - At least one special character
-    """
     if len(password) < 8:
         return False, "Password must be at least 8 characters long."
     if not re.search(r'[A-Z]', password):
@@ -158,19 +148,13 @@ def validate_password(password):
         return False, "Password must contain at least one special character (e.g. @, #, $, !)."
     return True, ""
 
-# --- NEW: Normalise phone number for DB key ---
 def normalise_phone(phone: str) -> str:
-    """Strip spaces/dashes/parentheses and ensure leading +."""
     digits = re.sub(r'[\s\-\(\)]', '', phone)
     return digits
 
-# --- NEW: Find user record by email OR phone ---
 def find_user(identifier: str):
-    """Return (email_key, record) or (None, None)."""
-    # Try email first
     if identifier in users_db:
         return identifier, users_db[identifier]
-    # Try phone
     norm = normalise_phone(identifier)
     for email_key, record in users_db.items():
         stored_phone = normalise_phone(record.get("phone", ""))
@@ -178,9 +162,7 @@ def find_user(identifier: str):
             return email_key, record
     return None, None
 
-# --- NEW: Send password-reset email ---
 def send_reset_email(to_email: str, token: str) -> bool:
-    """Send reset link via SMTP. Returns True on success."""
     reset_link = f"{APP_BASE_URL}/auth/reset_password_page?token={token}"
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "TranscribeFlow – Password Reset Request"
@@ -188,28 +170,23 @@ def send_reset_email(to_email: str, token: str) -> bool:
     msg["To"] = to_email
 
     text_body = f"""Hi,
-
 You requested a password reset for your TranscribeFlow account.
 Click the link below within 30 minutes to reset your password:
-
 {reset_link}
-
-If you did not request this, please ignore this email.
-
-— TranscribeFlow Team
 """
+    # Styled HTML Email
     html_body = f"""
-<html><body style="font-family:sans-serif; background:#0a0a0a; color:#fff; padding:40px;">
-  <h2 style="color:#00ffff;">TranscribeFlow – Password Reset</h2>
-  <p>You requested a password reset. Click the button below (valid for 30 minutes):</p>
-  <a href="{reset_link}"
-     style="display:inline-block; margin:20px 0; padding:14px 30px; background:#00ffff;
-            color:#000; font-weight:800; border-radius:50px; text-decoration:none;">
-    Reset Password
-  </a>
-  <p style="opacity:.5; font-size:12px;">If you didn't request this, ignore this email.</p>
-</body></html>
-"""
+    <html><body style="font-family:sans-serif; background:#0a0a0a; color:#fff; padding:40px;">
+      <h2 style="color:#00ffff;">TranscribeFlow – Password Reset</h2>
+      <p>You requested a password reset. Click the button below (valid for 30 minutes):</p>
+      <a href="{reset_link}" 
+         style="display:inline-block; margin:20px 0; padding:14px 30px; background:#00ffff; 
+                color:#000; font-weight:800; border-radius:50px; text-decoration:none;">
+        Reset Password
+      </a>
+      <p style="opacity:.5; font-size:12px;">If you didn't request this, ignore this email.</p>
+    </body></html>
+    """
     msg.attach(MIMEText(text_body, "plain"))
     msg.attach(MIMEText(html_body, "html"))
 
@@ -228,20 +205,17 @@ If you did not request this, please ignore this email.
 # AUTH ROUTES
 # ============================================================
 
-# --- REGISTER (now accepts optional phone) ---
 @app.route('/auth/register', methods=['POST'])
 def register():
     data = request.get_json()
-
     if not data or 'email' not in data or 'password' not in data or 'name' not in data:
         return jsonify({"detail": "Missing name, email, or password"}), 400
 
-    name     = data['name'].strip()
-    email    = data['email'].strip().lower()
+    name = data['name'].strip()
+    email = data['email'].strip().lower()
     password = data['password']
-    phone    = normalise_phone(data.get('phone', ''))
+    phone = normalise_phone(data.get('phone', ''))
 
-    # Password strength check
     is_valid, err_msg = validate_password(password)
     if not is_valid:
         return jsonify({"detail": err_msg}), 400
@@ -249,7 +223,6 @@ def register():
     if email in users_db:
         return jsonify({"detail": "User already exists with this email."}), 400
 
-    # Check phone uniqueness (if provided)
     if phone:
         for record in users_db.values():
             if normalise_phone(record.get("phone", "")) == phone:
@@ -260,30 +233,27 @@ def register():
     user_details['password_hash'] = hash_password(password)
 
     users_db[email] = user_details
-    save_users()
+    save_json_db(DB_FILE, users_db)
 
     return jsonify({
         "message": "User registered successfully",
         "user_details": {
-            "user_id":       user_details['user_id'],
-            "name":          user_details['name'],
-            "email":         user_details['email'],
-            "phone":         user_details['phone'],
+            "user_id": user_details['user_id'],
+            "name": user_details['name'],
+            "email": user_details['email'],
+            "phone": user_details['phone'],
             "registered_on": user_details['registered_on']
         }
     })
 
-
-# --- LOGIN (email OR phone) ---
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.get_json()
-
     if not data or 'identifier' not in data or 'password' not in data:
         return jsonify({"detail": "Missing identifier (email/phone) or password"}), 400
 
     identifier = data['identifier'].strip()
-    password   = data['password']
+    password = data['password']
 
     email_key, user_record = find_user(identifier)
 
@@ -292,58 +262,47 @@ def login():
 
     return jsonify({
         "access_token": create_token(email_key),
-        "user_id":      user_record['user_id'],
-        "name":         user_record['name']
+        "user_id": user_record['user_id'],
+        "name": user_record['name']
     })
 
-
-# --- FORGOT PASSWORD – request reset ---
 @app.route('/auth/forgot_password', methods=['POST'])
 def forgot_password():
     data = request.get_json()
-
     if not data or 'email' not in data:
         return jsonify({"detail": "Missing email address"}), 400
 
     email = data['email'].strip().lower()
 
-    # Always return success to avoid user enumeration
     if email not in users_db:
         return jsonify({"message": "If that email is registered, a reset link has been sent."})
 
-    # Generate a secure token (valid 30 min)
     token = secrets.token_urlsafe(48)
     reset_tokens[token] = {
-        "email":   email,
+        "email": email,
         "expires": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
     }
 
     sent = send_reset_email(email, token)
 
     if not sent:
-        # Remove token so it cannot be used if email failed
         reset_tokens.pop(token, None)
         return jsonify({"detail": "Could not send reset email. Please check SMTP configuration."}), 500
 
     return jsonify({"message": "If that email is registered, a reset link has been sent."})
 
-
-# --- RESET PASSWORD PAGE (GET) – served via Flask so the link works ---
 @app.route('/auth/reset_password_page', methods=['GET'])
 def reset_password_page():
     token = request.args.get('token', '')
     return render_template('reset_password.html', token=token)
 
-
-# --- RESET PASSWORD (POST) – actually updates the password ---
 @app.route('/auth/reset_password', methods=['POST'])
 def reset_password():
     data = request.get_json()
-
     if not data or 'token' not in data or 'new_password' not in data:
         return jsonify({"detail": "Missing token or new_password"}), 400
 
-    token        = data['token']
+    token = data['token']
     new_password = data['new_password']
 
     token_data = reset_tokens.get(token)
@@ -354,7 +313,6 @@ def reset_password():
         reset_tokens.pop(token, None)
         return jsonify({"detail": "Reset token has expired. Please request a new one."}), 400
 
-    # Validate new password strength
     is_valid, err_msg = validate_password(new_password)
     if not is_valid:
         return jsonify({"detail": err_msg}), 400
@@ -364,14 +322,13 @@ def reset_password():
         return jsonify({"detail": "User not found."}), 404
 
     users_db[email]['password_hash'] = hash_password(new_password)
-    save_users()
-    reset_tokens.pop(token, None)   # token is single-use
+    save_json_db(DB_FILE, users_db)
+    reset_tokens.pop(token, None)
 
     return jsonify({"message": "Password reset successfully! You can now log in."})
 
-
 # ============================================================
-# TRANSCRIPTION & APP FUNCTIONALITY  (unchanged)
+# TRANSCRIPTION & APP FUNCTIONALITY
 # ============================================================
 
 def allowed_file(filename):
@@ -403,18 +360,20 @@ def run_transcription(file_path, filename):
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Audio file not found at {file_path}")
 
+        # 1. Transcribe
         result = model.transcribe(file_path, verbose=True, fp16=False)
         processing_jobs[filename]['progress'] = 60
 
         full_text = result['text'].strip()
-        segments  = result.get('segments', [])
+        segments = result.get('segments', [])
         formatted_transcript = ""
 
         for s in segments:
             start = format_timestamp(s['start'])
-            end   = format_timestamp(s['end'])
+            end = format_timestamp(s['end'])
             formatted_transcript += f"[{start} - {end}] {s['text'].strip()}\n"
 
+        # 2. Summarize
         processing_jobs[filename]['progress'] = 75
         summary_text = ""
 
@@ -433,8 +392,9 @@ def run_transcription(file_path, filename):
 
         processing_jobs[filename]['progress'] = 85
 
+        # 3. Save Output
         transcript_path = os.path.join(app.config['UPLOAD_FOLDER'], filename + ".txt")
-        summary_path    = os.path.join(app.config['UPLOAD_FOLDER'], filename + "_summary.txt")
+        summary_path = os.path.join(app.config['UPLOAD_FOLDER'], filename + "_summary.txt")
 
         with open(transcript_path, "w", encoding="utf-8") as f:
             f.write(formatted_transcript)
@@ -442,8 +402,10 @@ def run_transcription(file_path, filename):
             f.write(summary_text)
 
         processing_jobs[filename].update({
-            'status': 'completed', 'progress': 100,
-            'transcript': formatted_transcript, 'summary': summary_text
+            'status': 'completed', 
+            'progress': 100,
+            'transcript': formatted_transcript, 
+            'summary': summary_text
         })
         print(f"Transcription completed for: {filename}")
 
@@ -451,32 +413,89 @@ def run_transcription(file_path, filename):
         print(f"ERROR in run_transcription for {filename}: {e}")
         processing_jobs[filename] = {'status': 'error', 'message': str(e), 'progress': 0}
 
+# --- UPDATED INDEX (With Sorting Logic) ---
 @app.route('/')
 def index():
-    files = []
+    files_data = []
     if os.path.exists(UPLOAD_FOLDER):
         for f in os.listdir(UPLOAD_FOLDER):
             if allowed_file(f):
-                path = os.path.join(UPLOAD_FOLDER, f)
-                files.append({'name': f, 'time': time.ctime(os.path.getctime(path))})
-    return render_template('index.html', files=files)
+                file_path = os.path.join(UPLOAD_FOLDER, f)
+                try:
+                    stats = os.stat(file_path)
+                    
+                    # File Size Logic
+                    size_bytes = stats.st_size
+                    if size_bytes < 1024 * 1024:
+                        size_str = f"{round(size_bytes/1024)} KB"
+                    else:
+                        size_str = f"{round(size_bytes/(1024*1024), 1)} MB"
+                    
+                    # File Type Logic
+                    file_ext = f.rsplit('.', 1)[1].upper()
+                    
+                    # Timestamp Logic
+                    raw_time = stats.st_ctime
+                    time_str = time.strftime("%b %d, %H:%M", time.localtime(raw_time))
 
+                    files_data.append({
+                        'name': f,
+                        'time': time_str,       # For display
+                        'timestamp': raw_time,  # For sorting
+                        'size': size_bytes,     # For sorting
+                        'size_str': size_str,   # For display
+                        'type': file_ext        # For sorting
+                    })
+                except Exception as e:
+                    print(f"Error reading stats for {f}: {e}")
+
+    # Default sort: Newest first
+    files_data.sort(key=lambda x: x['timestamp'], reverse=True)
+    
+    return render_template('index.html', files=files_data)
+
+# --- UPLOAD ROUTE (With Persistent Free Trial) ---
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:
+        # --- FREE TRIAL LOGIC ---
+        auth_header = request.headers.get('Authorization')
+        client_ip = request.remote_addr
+        
+        # If user is Guest (no token)
+        if not auth_header or auth_header == 'Bearer null' or auth_header == 'Bearer ':
+            # Check DB for IP
+            if client_ip in guest_usage:
+                return jsonify({
+                    'error': 'FREE_TRIAL_ENDED', 
+                    'message': 'You have used your free transcription. Please Sign Up to continue!'
+                }), 403
+            
+            # Log usage & SAVE to disk
+            guest_usage[client_ip] = time.time()
+            save_json_db(GUEST_USAGE_FILE, guest_usage)
+        # -----------------------------
+
         if 'audio' not in request.files:
             return jsonify({'error': 'No audio part in request'}), 400
+        
         file = request.files['audio']
         if file.filename == '':
             return jsonify({'error': 'No selected file'}), 400
+        
         if file and allowed_file(file.filename):
-            filename  = secure_filename(file.filename)
+            filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            
             file.save(file_path)
+            
+            # Start background thread
             threading.Thread(target=run_transcription, args=(file_path, filename)).start()
+            
             return jsonify({'message': 'Upload successful', 'filename': filename})
         else:
             return jsonify({'error': 'Invalid file type. Allowed: mp3, wav'}), 400
+            
     except Exception as e:
         print(f"UPLOAD ROUTE ERROR: {e}")
         return jsonify({'error': f"Server Error: {str(e)}"}), 500
@@ -488,27 +507,37 @@ def check_status(filename):
 
 @app.route('/translate_on_fly', methods=['POST'])
 def translate_on_fly():
-    data       = request.get_json()
+    data = request.get_json()
     transcript = data.get('transcript', '')
-    summary    = data.get('summary', '')
+    summary = data.get('summary', '')
     target_lang = data.get('target', 'en')
+    
     try:
         translator = GoogleTranslator(source='auto', target=target_lang)
         translated_text = ""
-        for chunk in [transcript[i:i+4500] for i in range(0, len(transcript), 4500)]:
+        
+        # Chunk translate transcript
+        chunks = [transcript[i:i+4500] for i in range(0, len(transcript), 4500)]
+        for chunk in chunks:
             translated_text += translator.translate(chunk)
+            
         translated_summary = translator.translate(summary) if summary else ""
-        return jsonify({'success': True, 'translated_text': translated_text, 'translated_summary': translated_summary})
+        
+        return jsonify({
+            'success': True, 
+            'translated_text': translated_text, 
+            'translated_summary': translated_summary
+        })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/download/<filename>')
 def download_file(filename):
-    file_type   = request.args.get('type', 'txt')
+    file_type = request.args.get('type', 'txt')
     target_lang = request.args.get('lang', 'en')
 
     transcript_path = os.path.join(app.config['UPLOAD_FOLDER'], filename + ".txt")
-    summary_path    = os.path.join(app.config['UPLOAD_FOLDER'], filename + "_summary.txt")
+    summary_path = os.path.join(app.config['UPLOAD_FOLDER'], filename + "_summary.txt")
 
     if not os.path.exists(transcript_path):
         return "File data not found. Please wait for processing to complete.", 404
@@ -518,10 +547,12 @@ def download_file(filename):
     with open(summary_path, "r", encoding="utf-8") as f:
         summary = f.read()
 
+    # Translation
     if target_lang != 'en':
         try:
             translator = GoogleTranslator(source='auto', target=target_lang)
             summary = translator.translate(summary) if summary else ""
+            
             chunks = [transcript[i:i+4500] for i in range(0, len(transcript), 4500)]
             translated_chunks = []
             for c in chunks:
@@ -533,22 +564,13 @@ def download_file(filename):
         except Exception as e:
             print(f"Translation Error during download: {e}")
 
+    # PDF Generation
     if file_type == 'pdf':
         try:
-            pdf      = FPDF()
+            pdf = FPDF()
             pdf.set_auto_page_break(auto=True, margin=15)
-            font_map = {
-                'hi': 'NotoSansDevanagari-Regular.ttf',
-                'ja': 'NotoSansJP-Regular.ttf',
-                'ar': 'NotoSansArabic-Regular.ttf',
-                'en': 'NotoSans-Regular.ttf'
-            }
-            desired_font = font_map.get(target_lang, 'NotoSans-Regular.ttf')
-
-            if os.path.exists(desired_font):
-                pdf.add_font("CustomFont", style="", fname=desired_font)
-                family = "CustomFont"
-            elif os.path.exists('NotoSans-Regular.ttf'):
+            
+            if os.path.exists('NotoSans-Regular.ttf'):
                 pdf.add_font("CustomFont", style="", fname='NotoSans-Regular.ttf')
                 family = "CustomFont"
             else:
@@ -565,15 +587,26 @@ def download_file(filename):
             pdf.set_font(family, size=20)
             pdf.cell(0, 15, txt="TranscribeFlow Report", ln=True, align='C')
             pdf.ln(5)
+            
             pdf.set_font(family, size=14)
             pdf.cell(0, 10, txt=f"Summary ({target_lang.upper()}):", ln=True)
             pdf.set_font(family, size=11)
-            pdf.multi_cell(0, 7, txt=format_for_pdf(summary, target_lang))
+            
+            try:
+                pdf.multi_cell(0, 7, txt=format_for_pdf(summary, target_lang))
+            except:
+                pdf.multi_cell(0, 7, txt=summary.encode('latin-1', 'replace').decode('latin-1'))
+                
             pdf.ln(10)
+            
             pdf.set_font(family, size=14)
             pdf.cell(0, 10, txt=f"Transcript ({target_lang.upper()}):", ln=True)
             pdf.set_font(family, size=10)
-            pdf.multi_cell(0, 6, txt=format_for_pdf(transcript, target_lang))
+            
+            try:
+                pdf.multi_cell(0, 6, txt=format_for_pdf(transcript, target_lang))
+            except:
+                pdf.multi_cell(0, 6, txt=transcript.encode('latin-1', 'replace').decode('latin-1'))
 
             pdf_output = pdf.output()
             return Response(
@@ -584,6 +617,7 @@ def download_file(filename):
         except Exception as e:
             return f"Error generating PDF: {str(e)}", 500
 
+    # TXT Output
     txt_content = f"SUMMARY:\n{summary}\n\nTRANSCRIPT:\n{transcript}"
     return Response(
         txt_content.encode('utf-8'),
@@ -601,6 +635,7 @@ def delete_file(filename):
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         if os.path.exists(file_path):
             os.remove(file_path)
+        
         for ext in [".txt", "_summary.txt"]:
             extra_file = os.path.join(app.config['UPLOAD_FOLDER'], filename + ext)
             if os.path.exists(extra_file):
@@ -621,3 +656,4 @@ def clear_all():
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)
+>>>>>>> upstream/main
